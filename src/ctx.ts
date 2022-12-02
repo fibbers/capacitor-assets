@@ -50,10 +50,11 @@ async function loadProject(args: any, projectRootPath?: string, projectAssetPath
 }
 
 // TODO: Use the config loading stuff from @capacitor/configure
-function loadMobileProjectConfig(args: any): MobileProjectConfig {
+function loadMobileProjectConfig(args: any): MobileProjectConfig & { ios?: { appIconSetName: string } } {
   return {
     ios: {
       path: args.iosProject ?? 'ios/App',
+      appIconSetName: args.iosAppIconSetName ?? 'AppIcon',
     },
     android: {
       path: args.androidProject ?? 'android',

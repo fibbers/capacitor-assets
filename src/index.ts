@@ -73,6 +73,7 @@ export function runProgram(ctx: Context) {
     )
     .option('--iosProject <dir>', 'Path to iOS project (defaults to "ios/App")')
     .option('--androidProject <dir>', 'Path to Android project (defaults to "android")')
+    .option('--iosAppIconSetName <name>', 'Name of iOS AppIcon set (defaults to "AppIcon")')
     /*
     .option(
       '--pwaTags',

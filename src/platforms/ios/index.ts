@@ -18,10 +18,12 @@ import {
 import * as IosAssetTemplates from './assets';
 import sharp from 'sharp';
 
-export const IOS_APP_ICON_SET_NAME = 'AppIcon';
-export const IOS_APP_ICON_SET_PATH = `App/Assets.xcassets/${IOS_APP_ICON_SET_NAME}.appiconset`;
+// export const IOS_APP_ICON_SET_NAME = 'AppIcon';
+// export const IOS_APP_ICON_SET_PATH = `App/Assets.xcassets/${IOS_APP_ICON_SET_NAME}.appiconset`;
 export const IOS_SPLASH_IMAGE_SET_NAME = 'Splash';
 export const IOS_SPLASH_IMAGE_SET_PATH = `App/Assets.xcassets/${IOS_SPLASH_IMAGE_SET_NAME}.imageset`;
+
+export const getAppIconSetPath = (appIconSetName: string): string => `App/Assets.xcassets/${appIconSetName}.appiconset`;
 
 export class IosAssetGenerator extends AssetGenerator {
   constructor(options: AssetGeneratorOptions = {}) {
@@ -185,10 +187,12 @@ export class IosAssetGenerator extends AssetGenerator {
     }
 
     const iosDir = project.config.ios!.path!;
+    // @ts-ignore
+    const appIconSetName = project.config.ios!.appIconSetName!;
     const lightDefaultBackground = '#ffffff';
     const generated = await Promise.all(
       icons.map(async (icon) => {
-        const dest = join(iosDir, IOS_APP_ICON_SET_PATH, icon.name);
+        const dest = join(iosDir, getAppIconSetPath(appIconSetName), icon.name);
 
         const outputInfo = await pipe
           .resize(icon.width, icon.height)
@@ -304,7 +308,10 @@ export class IosAssetGenerator extends AssetGenerator {
   }
 
   private async updateIconsContentsJson(generated: OutputAsset[], project: Project) {
-    const contentsJsonPath = join(project.config.ios!.path!, IOS_APP_ICON_SET_PATH, 'Contents.json');
+    const iosDir = project.config.ios!.path!;
+    // @ts-ignore
+    const appIconSetName = project.config.ios!.appIconSetName!;
+    const contentsJsonPath = join(iosDir, getAppIconSetPath(appIconSetName), 'Contents.json');
     const json = await readFile(contentsJsonPath, { encoding: 'utf-8' });
 
     const parsed = JSON.parse(json);
